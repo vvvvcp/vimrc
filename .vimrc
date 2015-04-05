@@ -78,3 +78,10 @@ set autoread
 "autocmd! bufwritepost .vimrc source %
 autocmd! bufwritepost ~/.vimrc source %
 source ~/.vim-as-a-python-ide.vimrc
+" Define a function that can tell me if a file is executable
+function! FileExecutable (fname)
+  execute "silent! ! test -x" a:fname
+  return v:shell_error
+endfunction
+" Automatically make Perl and Shell scripts executable if they aren't already
+au BufWritePost *.sh,*.pl,*.cgi if FileExecutable("%:p") | :!chmod a+x % ^@ endif
